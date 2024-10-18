@@ -228,11 +228,11 @@ function setupBattle() {
   BattleTotalsSheet.appendRow(['Battle Over', currentTurn +' Turns']);
   if (team1TotalRepair > team2TotalRepair)
   {
-    BattleTotalsSheet.appendRow(['Team 1 Victorty']);
+    BattleTotalsSheet.appendRow(['Team 2 Victorty']);
   }
   else if (team1TotalRepair < team2TotalRepair)
   {
-    BattleTotalsSheet.appendRow(['Team 2 Victorty']);
+    BattleTotalsSheet.appendRow(['Team 1 Victorty']);
   }
   else
   {
