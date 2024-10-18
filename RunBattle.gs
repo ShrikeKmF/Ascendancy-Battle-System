@@ -136,7 +136,7 @@ function setupBattle() {
         var heavyAttack = shipDesignsData[j][2];  // Heavy Battery
         var lightAttack = shipDesignsData[j][3];  // Light Battery
         var pointAttack = shipDesignsData[j][4];  // Point Defence
-        var missileAttack = shipDesignsData[j][8];  // Missile
+        var missileAttack = shipDesignsData[j][9];  // Missile
         var armour = shipDesignsData[j][10] === 1;  // Armour
         var hasFCS = shipDesignsData[j][6] === 1; 
         var hangers = shipDesignsData[j][11]; 
@@ -268,6 +268,10 @@ function setupBattle() {
         for (let i = 0; i < ship.heavyAttack; i++) {
           // Pick random enemy ship from Team 2
           var enemyShip = getRandomEnemyShip('team1');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team1');
+          };
           var hitChance = weaponTypes['Heavy Battery'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -298,6 +302,10 @@ function setupBattle() {
         for (let i = 0; i < ship.lightAttack; i++) {
           // Pick random enemy ship from Team 2
           var enemyShip = getRandomEnemyShip('team1');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team1');
+          };
           var hitChance = weaponTypes['Light Battery'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -328,6 +336,10 @@ function setupBattle() {
         for (let i = 0; i < ship.pointAttack; i++) {
           // Pick random enemy ship from Team 2
           var enemyShip = getRandomEnemyShip('team1');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team1');
+          };
           var hitChance = weaponTypes['Point Defence'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -358,6 +370,10 @@ function setupBattle() {
         for (let i = 0; i < ship.missileAttack; i++) {
           // Pick random enemy ship from Team 2
           var enemyShip = getRandomEnemyShip('team1');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team1');
+          };
           var hitChance = weaponTypes['Missile'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -393,6 +409,10 @@ function setupBattle() {
         for (let i = 0; i < ship.heavyAttack; i++) {
           // Pick random enemy ship from Team 1
           var enemyShip = getRandomEnemyShip('team2');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team2');
+          };
           var hitChance = weaponTypes['Heavy Battery'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -423,6 +443,10 @@ function setupBattle() {
         for (let i = 0; i < ship.lightAttack; i++) {
           // Pick random enemy ship from Team 1
           var enemyShip = getRandomEnemyShip('team2');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team2');
+          };
           var hitChance = weaponTypes['Light Battery'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -452,6 +476,10 @@ function setupBattle() {
         for (let i = 0; i < ship.pointAttack; i++) {
           // Pick random enemy ship from Team 1
           var enemyShip = getRandomEnemyShip('team2');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team2');
+          };
           var hitChance = weaponTypes['Point Defence'][enemyShip.hullType];
 
           if (ship.FCS) {
@@ -482,6 +510,10 @@ function setupBattle() {
         for (let i = 0; i < ship.missileAttack; i++) {
           // Pick random enemy ship from Team 1
           var enemyShip = getRandomEnemyShip('team2');
+          while (enemyShip.isDestroyed)
+          {
+            var enemyShip = getRandomEnemyShip('team2');
+          };
           var hitChance = weaponTypes['Missile'][enemyShip.hullType];
 
           if (ship.FCS) {
