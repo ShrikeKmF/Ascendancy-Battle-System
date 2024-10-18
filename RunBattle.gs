@@ -12,11 +12,12 @@ class ShipType {
     this.baseRepairCost = 0;     // Base Repair Cost (Production Cost)
     this.isDestroyed = false;    // Whether the ship is destroyed (default: false)
     this.hullType = '';          // Hull type of the ship (default: empty)
-    this.shipClass = '';             // Ship Class
+    this.shipClass = '';         // Ship Class
+    this.hangers = 0;            // Hangers
   }
 
   // Set values for the ship attributes from ShipDesigns and HullTypes
-  setAttributes(heavyAttack, lightAttack, pointAttack, missileAttack, startingHP, armour, hasFCS, hullType, productionCost, shipClass) {
+  setAttributes(heavyAttack, lightAttack, pointAttack, missileAttack, startingHP, armour, hasFCS, hullType, productionCost, shipClass, hangers) {
     this.heavyAttack = heavyAttack;
     this.lightAttack = lightAttack;
     this.pointAttack = pointAttack;
@@ -29,6 +30,7 @@ class ShipType {
     this.baseRepairCost = productionCost;  // Directly set Production Cost as base repair cost
     this.isDestroyed = this.currentHP <= 0;
     this.shipClass = shipClass;
+    this.hangers = hangers;
   }
 
   // Method to reset the ship's current HP
@@ -130,6 +132,7 @@ function setupBattle() {
         var missileAttack = shipDesignsData[j][8];  // Missile
         var armour = shipDesignsData[j][10] === 1;  // Armour
         var hasFCS = shipDesignsData[j][6] === 1; 
+        var hangers = shipDesignsData[j][11]; 
 
         // Initialize default values
         var startingHP = 0;
@@ -152,7 +155,7 @@ function setupBattle() {
         for (var k = 0; k < teamOneShipCount; k++) {
           var shipId = (teamOneShips.length + 1);  // Unique ID for each ship in Team 1
           var newShip = new ShipType(shipId);
-          newShip.setAttributes(heavyAttack, lightAttack, pointAttack, missileAttack, startingHP, armour, hasFCS, hullType, shipDesignsData[j][15], shipClass);
+          newShip.setAttributes(heavyAttack, lightAttack, pointAttack, missileAttack, startingHP, armour, hasFCS, hullType, shipDesignsData[j][15], shipClass, hangers);
           teamOneShips.push(newShip);
         }
 
@@ -160,12 +163,32 @@ function setupBattle() {
         for (var k = 0; k < teamTwoShipCount; k++) {
           var shipId = (teamTwoShips.length + 1);  // Unique ID for each ship in Team 2
           var newShip = new ShipType(shipId);
-          newShip.setAttributes(heavyAttack, lightAttack, pointAttack, missileAttack, startingHP, armour, hasFCS, hullType, shipDesignsData[j][15], shipClass);
+          newShip.setAttributes(heavyAttack, lightAttack, pointAttack, missileAttack, startingHP, armour, hasFCS, hullType, shipDesignsData[j][15], shipClass, hangers);
           teamTwoShips.push(newShip);  // Add to team 2
         }
       }
     }
   }
+
+  teamOneShips.forEach(ship => {
+    for (var k = 0; k < ship.hangers * 4; k++)
+    {
+      var shipId = (teamOneShips.length + 1);  // Unique ID for each ship in Team 1
+      var newShip = new ShipType(shipId);
+      newShip.setAttributes(0, 0, 1, 1, 3, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
+      teamOneShips.push(newShip);
+    }
+  });
+
+  teamTwoShips.forEach(ship => {
+    for (var k = 0; k < ship.hangers * 4; k++)
+    {
+      var shipId = (teamTwoShips.length + 1);  // Unique ID for each ship in Team 2
+      var newShip = new ShipType(shipId);
+      newShip.setAttributes(0, 0, 1, 1, 3, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
+      teamTwoShips.push(newShip);
+    }
+  });
 
   // Now log the team data for further debugging
   Logger.log("Team 1 Ships: " + JSON.stringify(teamOneShips));
