@@ -43,6 +43,10 @@ class ShipType {
     this.currentHP -= damage;
     if (this.currentHP < 0) {
       this.currentHP = 0;  // Ensure currentHP doesn't go below 0
+      this.heavyAttack = 0;
+      this.lightAttack = 0;
+      this.pointAttack = 0;
+      this.missileAttack = 0;
     }
     this.isDestroyed = this.currentHP <= 0;  // Check if ship is destroyed
   }
@@ -89,6 +93,9 @@ function setupBattle() {
   var shipDesignsData = ShipDesignsSheet.getDataRange().getValues();
   var battleSetupData = BattleSetupSheet.getDataRange().getValues();
 
+  // Clear the BattleOutputSheet before appending new data
+  BattleOutputSheet.clear();
+
   var advantageMultiplier = battleSetupData[1][5];
 
   // Weapon types will be stored dynamically
@@ -109,8 +116,6 @@ function setupBattle() {
       'ArmourPen': armourPen
     };
   };
-
-  Logger.log(weaponTypes);
   
   // Arrays to hold ship instances for each team
   var teamOneShips = [];
@@ -175,7 +180,7 @@ function setupBattle() {
     {
       var shipId = (teamOneShips.length + 1);  // Unique ID for each ship in Team 1
       var newShip = new ShipType(shipId);
-      newShip.setAttributes(0, 0, 1, 1, 3, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
+      newShip.setAttributes(0, 0, 1, 1, 5, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
       teamOneShips.push(newShip);
     }
   });
@@ -185,17 +190,10 @@ function setupBattle() {
     {
       var shipId = (teamTwoShips.length + 1);  // Unique ID for each ship in Team 2
       var newShip = new ShipType(shipId);
-      newShip.setAttributes(0, 0, 1, 1, 3, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
+      newShip.setAttributes(0, 0, 1, 1, 5, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
       teamTwoShips.push(newShip);
     }
   });
-
-  // Now log the team data for further debugging
-  Logger.log("Team 1 Ships: " + JSON.stringify(teamOneShips));
-  Logger.log("Team 2 Ships: " + JSON.stringify(teamTwoShips));
-
-  // Clear the BattleOutputSheet before appending new data
-  BattleOutputSheet.clear();
 
   // Set headers for BattleOutputSheet
   BattleOutputSheet.appendRow([
@@ -219,8 +217,6 @@ function setupBattle() {
       'Team 2', ship.shipClass, ship.id, ship.hullType, ship.currentHP, ship.startingHP, ship.getRepairCost(), ship.getDestroyedStatus()
     ]);
   });
-
- 
 
   function simulateBattle() {
     // Log the start of the simulation
@@ -253,17 +249,19 @@ function setupBattle() {
             hitChance *= 1.1; // 10% boost if the ship has FCS
           }
 
+          if (advantageMultiplier == 1)
+          {
+            hitChance *= 1.1;
+          }
+
           var roll = Math.random();
           // Roll to hit (check based on the ship's hullType)
           if (roll <= hitChance) {
-            Logger.log(`Ship ID: ${ship.id} - Heavy Attack hits Ship ID: ${enemyShip.id}`);
-            Logger.log(`Needed roll: <= ${hitChance}, Actual roll: ${roll.toFixed(2)}`);
 
             // Check for critical hit
             if (rollCriticalHit()) {
               var criticalDamage = 4;  // Critical hit does 4x damage
               enemyShip.applyDamage(criticalDamage);
-              Logger.log(`Critical Hit! Ship ID: ${ship.id} deals ${criticalDamage} damage to Ship ID: ${enemyShip.id}`);
             } else {
               enemyShip.applyDamage(1); // Apply normal damage
             }
@@ -281,17 +279,19 @@ function setupBattle() {
             hitChance *= 1.1; // 10% boost if the ship has FCS
           }
 
+          if (advantageMultiplier == 1)
+          {
+            hitChance *= 1.1;
+          }
+
           var roll = Math.random();
           // Roll to hit (check based on the ship's hullType)
           if (roll <= hitChance) {
-            Logger.log(`Ship ID: ${ship.id} - Light Attack hits Ship ID: ${enemyShip.id}`);
-            Logger.log(`Needed roll: <= ${hitChance}, Actual roll: ${roll.toFixed(2)}`);
 
             // Check for critical hit
             if (rollCriticalHit()) {
               var criticalDamage = 4;  // Critical hit does 4x damage
               enemyShip.applyDamage(criticalDamage);
-              Logger.log(`Critical Hit! Ship ID: ${ship.id} deals ${criticalDamage} damage to Ship ID: ${enemyShip.id}`);
             } else {
               enemyShip.applyDamage(1); // Apply normal damage
             }
@@ -309,17 +309,19 @@ function setupBattle() {
             hitChance *= 1.1; // 10% boost if the ship has FCS
           }
 
+          if (advantageMultiplier == 1)
+          {
+            hitChance *= 1.1;
+          }
+
           var roll = Math.random();
           // Roll to hit (check based on the ship's hullType)
           if (roll <= hitChance) {
-            Logger.log(`Ship ID: ${ship.id} - Point Defence hits Ship ID: ${enemyShip.id}`);
-            Logger.log(`Needed roll: <= ${hitChance}, Actual roll: ${roll.toFixed(2)}`);
 
             // Check for critical hit
             if (rollCriticalHit()) {
               var criticalDamage = 4;  // Critical hit does 4x damage
               enemyShip.applyDamage(criticalDamage);
-              Logger.log(`Critical Hit! Ship ID: ${ship.id} deals ${criticalDamage} damage to Ship ID: ${enemyShip.id}`);
             } else {
               enemyShip.applyDamage(1); // Apply normal damage
             }
@@ -337,17 +339,19 @@ function setupBattle() {
             hitChance *= 1.1; // 10% boost if the ship has FCS
           }
 
+          if (advantageMultiplier == 1)
+          {
+            hitChance *= 1.1;
+          }
+
           var roll = Math.random();
           // Roll to hit (check based on the ship's hullType)
           if (roll <= hitChance) {
-            Logger.log(`Ship ID: ${ship.id} - Missile Attack hits Ship ID: ${enemyShip.id}`);
-            Logger.log(`Needed roll: <= ${hitChance}, Actual roll: ${roll.toFixed(2)}`);
 
             // Check for critical hit
             if (rollCriticalHit()) {
               var criticalDamage = 4;  // Critical hit does 4x damage
               enemyShip.applyDamage(criticalDamage);
-              Logger.log(`Critical Hit! Ship ID: ${ship.id} deals ${criticalDamage} damage to Ship ID: ${enemyShip.id}`);
             } else {
               enemyShip.applyDamage(1); // Apply normal damage
             }
@@ -370,17 +374,19 @@ function setupBattle() {
             hitChance *= 1.1; // 10% boost if the ship has FCS
           }
 
+          if (advantageMultiplier == 2)
+          {
+            hitChance *= 1.1;
+          }
+
           var roll = Math.random();
           // Roll to hit (check based on the ship's hullType)
           if (roll <= hitChance) {
-            Logger.log(`Ship ID: ${ship.id} - Heavy Attack hits Ship ID: ${enemyShip.id}`);
-            Logger.log(`Needed roll: <= ${hitChance}, Actual roll: ${roll.toFixed(2)}`);
 
             // Check for critical hit
             if (rollCriticalHit()) {
               var criticalDamage = 4;  // Critical hit does 4x damage
               enemyShip.applyDamage(criticalDamage);
-              Logger.log(`Critical Hit! Ship ID: ${ship.id} deals ${criticalDamage} damage to Ship ID: ${enemyShip.id}`);
             } else {
               enemyShip.applyDamage(1); // Apply normal damage
             }
@@ -398,17 +404,78 @@ function setupBattle() {
             hitChance *= 1.1; // 10% boost if the ship has FCS
           }
 
+          if (advantageMultiplier == 2)
+          {
+            hitChance *= 1.1;
+          }
+
           var roll = Math.random();
           // Roll to hit (check based on the ship's hullType)
           if (roll <= hitChance) {
-            Logger.log(`Ship ID: ${ship.id} - Light Attack hits Ship ID: ${enemyShip.id}`);
-            Logger.log(`Needed roll: <= ${hitChance}, Actual roll: ${roll.toFixed(2)}`);
 
             // Check for critical hit
             if (rollCriticalHit()) {
               var criticalDamage = 4;  // Critical hit does 4x damage
               enemyShip.applyDamage(criticalDamage);
-              Logger.log(`Critical Hit! Ship ID: ${ship.id} deals ${criticalDamage} damage to Ship ID: ${enemyShip.id}`);
+            } else {
+              enemyShip.applyDamage(1); // Apply normal damage
+            }
+          }
+        }
+      }
+      if (ship.pointAttack > 0) {
+        for (let i = 0; i < ship.pointAttack; i++) {
+          // Pick random enemy ship from Team 1
+          var enemyShip = getRandomEnemyShip('team2');
+          var hitChance = weaponTypes['Point Defence'][enemyShip.hullType];
+
+          if (ship.FCS) {
+            hitChance *= 1.1; // 10% boost if the ship has FCS
+          }
+
+          if (advantageMultiplier == 2)
+          {
+            hitChance *= 1.1;
+          }
+
+          var roll = Math.random();
+          // Roll to hit (check based on the ship's hullType)
+          if (roll <= hitChance) {
+
+            // Check for critical hit
+            if (rollCriticalHit()) {
+              var criticalDamage = 4;  // Critical hit does 4x damage
+              enemyShip.applyDamage(criticalDamage);
+            } else {
+              enemyShip.applyDamage(1); // Apply normal damage
+            }
+          }
+        }
+      }
+
+      if (ship.missileAttack > 0) {
+        for (let i = 0; i < ship.missileAttack; i++) {
+          // Pick random enemy ship from Team 1
+          var enemyShip = getRandomEnemyShip('team2');
+          var hitChance = weaponTypes['Missile'][enemyShip.hullType];
+
+          if (ship.FCS) {
+            hitChance *= 1.1; // 10% boost if the ship has FCS
+          }
+
+          if (advantageMultiplier == 2)
+          {
+            hitChance *= 1.1;
+          }
+
+          var roll = Math.random();
+          // Roll to hit (check based on the ship's hullType)
+          if (roll <= hitChance) {
+
+            // Check for critical hit
+            if (rollCriticalHit()) {
+              var criticalDamage = 4;  // Critical hit does 4x damage
+              enemyShip.applyDamage(criticalDamage);
             } else {
               enemyShip.applyDamage(1); // Apply normal damage
             }
@@ -417,13 +484,14 @@ function setupBattle() {
       }
     });
 
-    // Check if a 33% chance triggers an early end to the battle
-    if (Math.random() <= 0.33) {
-      Logger.log("Battle ended early due to chance roll.");
-      return;
-    }
+    // At the end of every turn there is a 33% chance the battle ends early and each side retreats
     if (currentTurn <= maxTurn)
     {
+      // Check if a 33% chance triggers an early end to the battle
+      if (Math.random() <= 0.33) {
+        return;
+      }
+
       simulateBattle();
     }
     
