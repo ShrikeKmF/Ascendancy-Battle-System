@@ -180,7 +180,7 @@ function setupBattle() {
     {
       var shipId = (teamOneShips.length + 1);  // Unique ID for each ship in Team 1
       var newShip = new ShipType(shipId);
-      newShip.setAttributes(0, 0, 1, 1, 5, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
+      newShip.setAttributes(0, 0, 1, 1, 4, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
       teamOneShips.push(newShip);
     }
   });
@@ -190,7 +190,7 @@ function setupBattle() {
     {
       var shipId = (teamTwoShips.length + 1);  // Unique ID for each ship in Team 2
       var newShip = new ShipType(shipId);
-      newShip.setAttributes(0, 0, 1, 1, 5, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
+      newShip.setAttributes(0, 0, 1, 1, 4, false, false, "Fighter", 0, "Multirole Fighter Squadron", 0);
       teamTwoShips.push(newShip);
     }
   });
