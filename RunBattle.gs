@@ -86,15 +86,17 @@ function setupBattle() {
   var BattleSetupSheet = spreadsheet.getSheetByName('BattleSetup');
   var HullTypesSheet = spreadsheet.getSheetByName('HullTypes');
   var BattleOutputSheet = spreadsheet.getSheetByName('BattleOutput');
+  var BattleTotalsSheet = spreadsheet.getSheetByName('BattleTotals');
 
   // Get data from HullTypes, ShipDesigns, WeaponTypes, BattleSetup
-  var hullTypesData = HullTypesSheet.getDataRange().getValues();  // HullTypes
+  var hullTypesData = HullTypesSheet.getDataRange().getValues();
   var weaponTypesData = WeaponTypesSheet.getDataRange().getValues();
   var shipDesignsData = ShipDesignsSheet.getDataRange().getValues();
   var battleSetupData = BattleSetupSheet.getDataRange().getValues();
 
   // Clear the BattleOutputSheet before appending new data
   BattleOutputSheet.clear();
+  BattleTotalsSheet.clear();
 
   var advantageMultiplier = battleSetupData[1][5];
 
@@ -204,18 +206,41 @@ function setupBattle() {
   var maxTurn = 3;
   simulateBattle();
 
+  var team1TotalDestroyed = 0;
+  var team1TotalRepair = 0;
+  var team2TotalDestroyed = 0;
+  var team2TotalRepair = 0;
+  teamOneShips.forEach(ship => {
+    if (ship.isDestroyed == true && ship.hullType != "Fighter")
+    {
+      team1TotalDestroyed++;
+    }
+    team1TotalRepair += ship.getRepairCost();
+  });
+  teamTwoShips.forEach(ship => {
+    if (ship.isDestroyed == true && ship.hullType != "Fighter")
+    {
+      team2TotalDestroyed++;
+    }
+    team2TotalRepair += ship.getRepairCost();
+  });
+
+  BattleTotalsSheet.appendRow(['Battle Over', currentTurn +' Turns']);
+  BattleTotalsSheet.appendRow(['Team 1 Total Ships Destroyed:', team1TotalDestroyed]);
+  BattleTotalsSheet.appendRow(['Team 1 Total Repair Costs:', team1TotalRepair]);
+  BattleTotalsSheet.appendRow(['Team 2 Total Ships Destroyed:', team2TotalDestroyed]);
+  BattleTotalsSheet.appendRow(['Team 2 Total Repair Costs:', team2TotalRepair]);
+
   // Populate the BattleOutputSheet for Team 1
   teamOneShips.forEach(ship => {
-    BattleOutputSheet.appendRow([
-      'Team 1', ship.shipClass, ship.id, ship.hullType, ship.currentHP, ship.startingHP, ship.getRepairCost(), ship.getDestroyedStatus()
-    ]);
+    if (ship.hullType != "Fighter")
+      BattleOutputSheet.appendRow(['Team 1', ship.shipClass, ship.id, ship.hullType, ship.currentHP, ship.startingHP, ship.getRepairCost(), ship.getDestroyedStatus()]);
   });
 
   // Populate the BattleOutputSheet for Team 2
   teamTwoShips.forEach(ship => {
-    BattleOutputSheet.appendRow([
-      'Team 2', ship.shipClass, ship.id, ship.hullType, ship.currentHP, ship.startingHP, ship.getRepairCost(), ship.getDestroyedStatus()
-    ]);
+    if (ship.hullType != "Fighter")
+      BattleOutputSheet.appendRow(['Team 2', ship.shipClass, ship.id, ship.hullType, ship.currentHP, ship.startingHP, ship.getRepairCost(), ship.getDestroyedStatus()]);
   });
 
   function simulateBattle() {
@@ -494,7 +519,6 @@ function setupBattle() {
 
       simulateBattle();
     }
-    
   }
 }
 
