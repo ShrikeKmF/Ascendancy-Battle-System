@@ -226,6 +226,19 @@ function setupBattle() {
   });
 
   BattleTotalsSheet.appendRow(['Battle Over', currentTurn +' Turns']);
+  if (team1TotalRepair > team2TotalRepair)
+  {
+    BattleTotalsSheet.appendRow(['Team 1 Victorty']);
+  }
+  else if (team1TotalRepair < team2TotalRepair)
+  {
+    BattleTotalsSheet.appendRow(['Team 2 Victorty']);
+  }
+  else
+  {
+    BattleTotalsSheet.appendRow(['Draw']);
+  }
+  
   BattleTotalsSheet.appendRow(['Team 1 Total Ships Destroyed:', team1TotalDestroyed]);
   BattleTotalsSheet.appendRow(['Team 1 Total Repair Costs:', team1TotalRepair]);
   BattleTotalsSheet.appendRow(['Team 2 Total Ships Destroyed:', team2TotalDestroyed]);
